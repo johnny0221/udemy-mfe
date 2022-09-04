@@ -78,7 +78,7 @@ export default function Album() {
               align='center'
               color='textPrimary'
               gutterBottom>
-              Home Pages
+              Home Page
             </Typography>
             <Typography
               variant='h5'
