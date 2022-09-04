@@ -5,7 +5,7 @@ const App = () => {
   return (
     <>
       <MarketingApp></MarketingApp>
-      <div>Hello cloudfront change</div>
+      <div>Hello cloudfront changes</div>
     </>
   );
 };
