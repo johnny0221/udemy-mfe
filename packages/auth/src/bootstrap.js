@@ -16,10 +16,11 @@ export const mount = (el, config) => {
     history.listen(config.onNavigate);
   }
 
-  ReactDOM.render(<App history={history} />, el);
+  ReactDOM.render(<App history={history} onSignIn={config.onSignIn} />, el);
   return {
     onParentNavigate: ({ pathname: nextPathname }) => {
       const { pathname: currentPathname } = history.location;
+      console.log('authapp navigate');
       if (currentPathname !== nextPathname) {
         history.push(nextPathname);
       }
@@ -29,7 +30,7 @@ export const mount = (el, config) => {
 
 // in development
 if (process.env.NODE_ENV === 'development') {
-  const devRoot = document.querySelector('#marketing_dev_root');
+  const devRoot = document.querySelector('#auth_dev_root');
   if (devRoot) {
     mount(devRoot, { defaultHistory: createBrowserHistory() });
   }

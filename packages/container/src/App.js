@@ -1,7 +1,7 @@
-import React from 'react';
-import { BrowserRouter } from 'react-router-dom';
-import MarketingApp from './components/MarketingApp';
+import React, { lazy, Suspense, useState } from 'react';
+import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import Header from './components/Header';
+import LoadSpinner from './components/LoadSpinner';
 import {
   StylesProvider,
   createGenerateClassName,
@@ -11,17 +11,29 @@ const generateClassName = createGenerateClassName({
   productionPrefix: 'co',
 });
 
+const MarketingLazy = lazy(() => import('./components/MarketingApp'));
+const AuthLazy = lazy(() => import('./components/AuthApp'));
+
 const App = () => {
+  const [isAuthenticated, setAuthenticated] = useState(false);
   return (
-    <StylesProvider generateClassName={generateClassName}>
-      <BrowserRouter>
+    <BrowserRouter>
+      <StylesProvider generateClassName={generateClassName}>
         <div>
-          <Header></Header>
-          <MarketingApp></MarketingApp>
-          <div>Hello cloudfront changes</div>
+          <Header
+            onSignOut={() => setAuthenticated(false)}
+            signedIn={isAuthenticated}></Header>
+          <Suspense fallback={<LoadSpinner />}>
+            <Switch>
+              <Route path='/auth'>
+                <AuthLazy onSignIn={() => setAuthenticated(true)}></AuthLazy>
+              </Route>
+              <Route path='/' component={MarketingLazy}></Route>
+            </Switch>
+          </Suspense>
         </div>
-      </BrowserRouter>
-    </StylesProvider>
+      </StylesProvider>
+    </BrowserRouter>
   );
 };
 
